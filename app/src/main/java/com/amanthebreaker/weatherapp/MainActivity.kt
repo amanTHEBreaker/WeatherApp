@@ -84,9 +84,9 @@ fun WeatherApp(
                     MyTextFieldComponent(
                         labelValue = "Enter City Name",
                         icon = Icons.Outlined.LocationOn,
-                        value= weatherViewModel.userInput,
+                            value= weatherUiState.cityName,
                         onValueChange = {
-                            weatherViewModel.updateUserInput(it)
+                            weatherViewModel.updateCityName(it)
                         }
                     )
 
