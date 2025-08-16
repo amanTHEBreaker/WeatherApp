@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class WeatherViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(Weather())
-    val uiState : StateFlow<Weather> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(WeatherUiState())
+    val uiState : StateFlow<WeatherUiState> = _uiState.asStateFlow()
 
     var userInput by mutableStateOf("")
         private set
@@ -22,7 +22,7 @@ class WeatherViewModel : ViewModel() {
         userInput = guessedWord
     }
 
-    fun getForcast() {
+    fun getForecast() {
         if(userInput.equals("Nagpur",ignoreCase = true)) {
             val temperature = "50 C"
             val humidity = "40 PCM"

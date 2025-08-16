@@ -1,6 +1,6 @@
 package com.amanthebreaker.weatherapp
 
-data class Weather (
+data class WeatherUiState (
     val currentCity : String = "",
     val temp : String = "",
     val humidity : String = ""

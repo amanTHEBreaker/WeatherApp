@@ -1,7 +1,6 @@
 package com.amanthebreaker.weatherapp
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -93,7 +92,7 @@ fun WeatherApp(
 
                     Button(
                         onClick = {
-                            weatherViewModel.getForcast()
+                            weatherViewModel.getForecast()
                         },
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(Color.Transparent)
