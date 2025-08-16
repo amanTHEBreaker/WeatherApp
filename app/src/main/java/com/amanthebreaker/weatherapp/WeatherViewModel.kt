@@ -29,7 +29,7 @@ class WeatherViewModel : ViewModel() {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
             // simulate network or call repository here
-            delay(200)
+            delay(5000)
 
             if (city.equals("Nagpur", ignoreCase = true)) {
                 _uiState.update {

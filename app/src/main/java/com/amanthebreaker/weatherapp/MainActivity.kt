@@ -86,16 +86,16 @@ fun WeatherApp(
                         icon = Icons.Outlined.LocationOn,
                             value= weatherUiState.cityName,
                         onValueChange = {
-                            weatherViewModel.updateCityName(it)
-                        }
+                            weatherViewModel.updateCityName(it)},
+                            enabled = !weatherUiState.isLoading // disable while loading
                     )
-
                     Button(
                         onClick = {
                             weatherViewModel.getForecast()
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(Color.Transparent)
+                        colors = ButtonDefaults.buttonColors(Color.Transparent),
+                        enabled = !weatherUiState.isLoading
                     ) {
                         Box(
                             modifier = Modifier
@@ -121,7 +121,8 @@ fun WeatherApp(
 fun MyTextFieldComponent(labelValue: String,
                          icon: ImageVector,
                          value : String,
-                         onValueChange : (String) -> Unit) {
+                         onValueChange : (String) -> Unit,
+                         enabled : Boolean = true) {
 
     OutlinedTextField(
         label = {
@@ -137,7 +138,8 @@ fun MyTextFieldComponent(labelValue: String,
                 contentDescription = "profile"
             )
         },
-        keyboardOptions = KeyboardOptions.Default
+        keyboardOptions = KeyboardOptions.Default,
+        enabled = enabled
     )
 }
 
