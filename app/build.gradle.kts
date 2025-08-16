@@ -48,6 +48,7 @@ dependencies {
     implementation (libs.converter.gson)
     implementation (libs.kotlinx.coroutines.android)
 
+    implementation (libs.okhttp3.logging.interceptor)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

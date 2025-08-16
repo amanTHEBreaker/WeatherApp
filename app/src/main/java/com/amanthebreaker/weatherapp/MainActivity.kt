@@ -20,9 +20,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,7 +34,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.amanthebreaker.weatherapp.ui.theme.WeatherAppTheme
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 
 import androidx.compose.ui.Alignment
 
@@ -41,6 +47,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.collectLatest
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,61 +64,90 @@ fun WeatherApp(
     weatherViewModel: WeatherViewModel = viewModel()
 ) {
     val weatherUiState by weatherViewModel.uiState.collectAsState()
+    val snackbarHostState  = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        weatherViewModel.uiEvent.collectLatest  { event ->
+                when(event) {
+                    is UiEvent.ShowSnackbar -> {
+                        snackbarHostState.showSnackbar(event.message)
+                    }
+                }
+        }
+    }
 
     val context = LocalContext.current
 
     WeatherAppTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(Modifier.height(16.dp))
-                HeadingMaker("Today's Forecast") {
-                    Text(
-                        text = weatherUiState.temp + " " + weatherUiState.humidity,
-                        style = MaterialTheme.typography.bodySmall,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .paddingFromBaseline(top = 30.dp, bottom = 10.dp)
-                            .padding(horizontal = 10.dp)
-                    )
+        Scaffold(snackbarHost = { SnackbarHost(hostState = snackbarHostState) }) {
+            padding ->
 
-                    MyTextFieldComponent(
-                        labelValue = "Enter City Name",
-                        icon = Icons.Outlined.LocationOn,
-                            value= weatherUiState.cityName,
-                        onValueChange = {
-                            weatherViewModel.updateCityName(it)},
-                            enabled = !weatherUiState.isLoading // disable while loading
-                    )
-                    Button(
-                        onClick = {
-                            weatherViewModel.getForecast()
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(Color.Transparent),
-                        enabled = !weatherUiState.isLoading
-                    ) {
-                        Box(
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp),
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(Modifier.height(16.dp))
+                    HeadingMaker("Today's Forecast") {
+                        Text(
+                            text = weatherUiState.temp + " " + weatherUiState.humidity,
+                            style = MaterialTheme.typography.bodySmall,
+                            textAlign = TextAlign.Center,
                             modifier = Modifier
-                                .background(
-                                    shape = RoundedCornerShape(50.dp),
-                                    color = Color.Black
-                                )
                                 .fillMaxWidth()
-                                .heightIn(48.dp),
-                            contentAlignment = Alignment.Center
+                                .paddingFromBaseline(top = 30.dp, bottom = 10.dp)
+                                .padding(horizontal = 10.dp)
+                        )
+
+                        MyTextFieldComponent(
+                            labelValue = "Enter City Name",
+                            icon = Icons.Outlined.LocationOn,
+                            value = weatherUiState.cityName,
+                            onValueChange = {
+                                weatherViewModel.updateCityName(it)
+                            },
+                            enabled = !weatherUiState.isLoading // disable while loading
+                        )
+
+                        Button(
+                            onClick = {
+                                weatherViewModel.getForecast()
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(Color.Transparent),
+                            enabled = !weatherUiState.isLoading
                         ) {
-                            Text(text = "Forcast", color = Color.White, fontSize = 20.sp)
+                            Box(
+                                modifier = Modifier
+                                    .background(
+                                        shape = RoundedCornerShape(50.dp),
+                                        color = Color.Black
+                                    )
+                                    .fillMaxWidth()
+                                    .heightIn(48.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(text = "Forcast", color = Color.White, fontSize = 20.sp)
+                            }
                         }
                     }
                 }
+                if (weatherUiState.isLoading) {
+                    Box(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .background(Color.Black.copy(alpha = 0.25f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
             }
+
         }
     }
 }
