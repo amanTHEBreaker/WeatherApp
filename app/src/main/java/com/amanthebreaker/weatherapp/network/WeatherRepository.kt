@@ -1,4 +1,6 @@
-package com.amanthebreaker.weatherapp
+package com.amanthebreaker.weatherapp.network
+
+import com.amanthebreaker.weatherapp.data.WeatherResponse
 
 class WeatherRepository(private val api: OpenWeatherApi) {
 

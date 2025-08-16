@@ -1,4 +1,4 @@
-package com.amanthebreaker.weatherapp
+package com.amanthebreaker.weatherapp.data
 
 data class WeatherUiState(
     val cityName: String = "",

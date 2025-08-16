@@ -1,5 +1,6 @@
-package com.amanthebreaker.weatherapp
+package com.amanthebreaker.weatherapp.network
 
+import com.amanthebreaker.weatherapp.data.WeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

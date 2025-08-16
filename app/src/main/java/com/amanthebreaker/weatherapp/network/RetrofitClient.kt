@@ -1,4 +1,4 @@
-package com.amanthebreaker.weatherapp
+package com.amanthebreaker.weatherapp.network
 
 
 import okhttp3.OkHttpClient
