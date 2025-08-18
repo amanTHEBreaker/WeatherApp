@@ -72,8 +72,8 @@ Presentation (UI) → ViewModel → Repository → Data Source
 ### 1️⃣ Clone the repo
 
 ```bash
-git clone https://github.com/your-username/weather-forecast-app.git
-cd weather-forecast-app
+git clone https://github.com/amanTHEBreaker/WeatherApp.git
+cd WeatherApp
 ```
 
 ### 2️⃣ Open in Android Studio
@@ -93,10 +93,9 @@ cd weather-forecast-app
 ```
 weather-forecast-app/
 │── app/
-│   ├── data/        # Data sources (API, local, repo)
+│   ├── data/        # Data sources
 │   ├── ui/          # Compose UI screens
 │   ├── viewmodel/   # ViewModels with StateFlow
-│   ├── di/          # Hilt modules (if added)
 │   └── utils/       # Helpers/extensions
 ```
 
@@ -118,14 +117,3 @@ If you find this project helpful, consider **starring ⭐ the repo** — it help
 
 ---
 
-## 📜 License
-
-MIT License © 2025 [Your Name](https://github.com/your-username)
-
----
-
-💡 **Pro Tip:** Adding a **project banner** (a wide image at the top with app branding) + **GitHub badges** (build status, Kotlin version, license) will make your repo *very attractive*.
-
----
-
-👉 Do you want me to also **design a banner image** (like the ones you see on trending Android repos), so your README stands out visually?
