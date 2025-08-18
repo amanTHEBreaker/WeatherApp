@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+
+
+    <string name="weather_title">Weather</string>
+    <string name="weather_subtitle">ForeCasts</string>
+    <string name="get_start">Get Start</string>
+    <string name="weather_illustration_cd">Weather illustration</string>
 </resources>
