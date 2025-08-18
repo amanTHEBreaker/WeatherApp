@@ -58,8 +58,7 @@ class WeatherViewModel(
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
-
-            val apiKey = "16349da9f3fbd51a63f0479e2892d828"
+            val apiKey = ""
             if (apiKey.isBlank()) {
                 _uiState.update { it.copy(isLoading = false, error = "API key missing") }
                 _uiEvent.send(UiEvent.ShowSnackbar("API Key Missing"))
