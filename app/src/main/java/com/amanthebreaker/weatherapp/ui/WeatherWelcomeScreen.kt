@@ -1,6 +1,5 @@
 package com.amanthebreaker.weatherapp.ui
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -34,22 +32,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.amanthebreaker.weatherapp.R
+import com.amanthebreaker.weatherapp.ui.theme.backgroundBrush1
 import com.amanthebreaker.weatherapp.util.WeatherAppDestination
 
 @Composable
 fun WeatherWelcomeScreen(
     onGetStarted: () -> Unit,
 ) {
-    val backgroundBrush = Brush.verticalGradient(
-        colors = listOf(Color(0xFF1F213A), Color(0xFF6A3CA8), Color(0xFFB85DAF))
-    )
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundBrush)
+            .background(backgroundBrush1)
             .padding(12.dp)
-            .clip(RoundedCornerShape(28.dp)) // gives rounded corners like the mock
+            .clip(RoundedCornerShape(28.dp))
     ) {
         Column(
             modifier = Modifier
@@ -128,13 +124,26 @@ fun WeatherNavGraph(startDestination: String = WeatherAppDestination.WEL_ROUTE) 
         }
 
         composable(WeatherAppDestination.HOME_ROUTE) {
-            WeatherApp()
+            WeatherApp(
+                onBackToWelcome = {
+                    navController.navigate(WeatherAppDestination.WEL_ROUTE) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState       = true
+                        }
+                        launchSingleTop     = true
+                        restoreState        = true
+                    }
+                },
+                onClickToSettings = {
+                    navController.navigate(WeatherAppDestination.SETTINGS)
+                }
+            )
+        }
+        composable(WeatherAppDestination.SETTINGS){
+           SettingsPage()
         }
     }
 }
-
-
-
 
 @Preview(showBackground = true)
 @Composable

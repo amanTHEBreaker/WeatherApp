@@ -11,16 +11,18 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -32,23 +34,30 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import com.amanthebreaker.weatherapp.ui.theme.LocalGradientColors
 import com.amanthebreaker.weatherapp.ui.theme.WeatherAppTheme
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun WeatherApp(
+    onBackToWelcome : () -> Unit,
+    onClickToSettings : () -> Unit,
     weatherViewModel: WeatherViewModel = viewModel()
 ) {
     val weatherUiState by weatherViewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+    val gradientColors = LocalGradientColors.current
+    val backgroundBrush = Brush.verticalGradient(gradientColors)
 
     LaunchedEffect(Unit) {
         weatherViewModel.uiEvent.collectLatest { event ->
@@ -68,23 +77,46 @@ fun WeatherApp(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp),
-        ) {
+                .background(backgroundBrush)
+                .padding(12.dp)
+                .clip(RoundedCornerShape(28.dp))
+        )  {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(Modifier.height(16.dp))
                 HeadingMaker("Today's Forecast") {
-                    Text(
-                        text = weatherUiState.temp + " " + weatherUiState.humidity,
-                        style = MaterialTheme.typography.bodySmall,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .paddingFromBaseline(top = 30.dp, bottom = 10.dp)
-                            .padding(horizontal = 10.dp)
-                    )
+
+                    if(weatherUiState.iconDay != null) {
+                        AsyncImage(
+                            model = weatherUiState.iconDay,
+                            contentDescription = weatherUiState.iconDay,
+                            modifier = Modifier.size(100.dp)
+                        )
+                    }
+
+                    if (weatherUiState.cityName.isBlank() || weatherUiState.temp == "N/A") {
+                        Text(
+                            text = "Enter a city to see forecast",
+                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White.copy(alpha = 0.7f)),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .paddingFromBaseline(top = 30.dp, bottom = 10.dp)
+                                .padding(horizontal = 10.dp)
+                        )
+                    } else {
+                        Text(
+                            text = "Temperature : ${weatherUiState.temp}  Humidity : ${weatherUiState.humidity}  ",
+                            style = MaterialTheme.typography.titleMedium.copy(color = Color.White),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .paddingFromBaseline(top = 30.dp, bottom = 10.dp)
+                                .padding(horizontal = 10.dp)
+                        )
+                    }
+
 
                     MyTextFieldComponent(
                         labelValue = "Enter City Name",
@@ -146,21 +178,29 @@ fun MyTextFieldComponent(
 ) {
 
     OutlinedTextField(
-        label = {
-            Text(text = labelValue)
-        },
         value = value,
         onValueChange = onValueChange,
-        modifier = Modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.medium,
+        label = { Text(labelValue, color = Color.White) },
         leadingIcon = {
             Icon(
                 imageVector = icon,
-                contentDescription = "profile"
+                contentDescription = "location",
+                tint = Color.White
             )
         },
-        keyboardOptions = KeyboardOptions.Default,
-        enabled = enabled
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.medium,
+        enabled = enabled,
+        textStyle = LocalTextStyle.current.copy(color = Color.White),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = Color.White,
+            unfocusedTextColor = Color.White,
+            focusedLabelColor = Color.White,
+            unfocusedLabelColor = Color.White.copy(alpha = 0.7f),
+            focusedBorderColor = Color.White,
+            unfocusedBorderColor = Color.White.copy(alpha = 0.6f),
+            cursorColor = Color.White
+        )
     )
 }
 
@@ -177,7 +217,7 @@ fun HeadingMaker(
     ) {
         Text(
             text = title,
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.bodySmall.copy(color = Color.White),
             modifier = Modifier
                 .paddingFromBaseline(top = 40.dp, bottom = 16.dp)
                 .padding(horizontal = 16.dp)
@@ -191,6 +231,6 @@ fun HeadingMaker(
 @Composable
 fun WeatherAppTEst() {
     WeatherAppTheme {
-        WeatherApp()
+        WeatherApp(onBackToWelcome = {}, onClickToSettings = {})
     }
 }
