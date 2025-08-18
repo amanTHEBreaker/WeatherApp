@@ -8,15 +8,28 @@ import com.amanthebreaker.weatherapp.network.WeatherRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
-import kotlinx.coroutines.flow.receiveAsFlow
 
 sealed class UiEvent {
     data class ShowSnackbar(val message: String) : UiEvent()
 }
+
+private val weatherIconMap = mapOf(
+    "clear sky" to "01",
+    "few clouds" to "02",
+    "scattered clouds" to "03",
+    "broken clouds" to "04",
+    "shower rain" to "09",
+    "rain" to "10",
+    "thunderstorm" to "11",
+    "snow" to "13",
+    "mist" to "50"
+)
+
 
 class WeatherViewModel(
     private val repo: WeatherRepository = WeatherRepository(RetrofitClient.api)
@@ -55,9 +68,19 @@ class WeatherViewModel(
 
             val result = repo.fetchCurrentWeather(city, apiKey)
             result.fold(onSuccess = { resp ->
+
                 val temp = resp.main?.temp?.let { String.format("%.1f°C", it) } ?: "N/A"
                 val humidity = resp.main?.humidity?.let { "$it%" } ?: "N/A"
-                _uiState.update { it.copy(temp = temp, humidity = humidity, isLoading = false) }
+                val description = resp.weather?.firstOrNull()?.description ?: "N/A"
+
+                val iconBase = weatherIconMap[description.lowercase()] ?: "01"
+                val dayIcon     =   "https://openweathermap.org/img/wn/${iconBase}d@4x.png"
+                val nightIcon   =   "https://openweathermap.org/img/wn/${iconBase}n@4x.png"
+
+                _uiState.update {
+                    it.copy(temp = temp, humidity = humidity, isLoading = false, iconDay = dayIcon, iconNight = nightIcon)
+                }
+
             }, onFailure = { err ->
                 val msg = when (err) {
                     is UnknownHostException -> "No internet connection (DNS failed). Check your network."

@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.amanthebreaker.weatherapp.ui.WeatherNavGraph
-import com.amanthebreaker.weatherapp.ui.WeatherWelcomeScreen
 import com.amanthebreaker.weatherapp.ui.theme.WeatherAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,7 +13,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WeatherAppTheme {
-//                WeatherApp()
                 WeatherNavGraph()
             }
         }

@@ -5,5 +5,7 @@ data class WeatherUiState(
     val temp: String = "",
     val humidity: String = "",
     val isLoading: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val iconDay : String? = null,
+    val iconNight : String? = null
 )

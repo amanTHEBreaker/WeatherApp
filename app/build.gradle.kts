@@ -50,6 +50,9 @@ dependencies {
 
     implementation (libs.okhttp3.logging.interceptor)
 
+//    for loading icons
+    implementation(libs.coil.compose)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
