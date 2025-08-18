@@ -1,14 +1,3 @@
-
-
-* **Attractive** → Screenshots, badges, emojis
-* **Informative** → Tech stack, architecture, features, setup
-* **Developer-friendly** → Clear install/run steps
-* **Professional** → Structured & polished
-
-
-
----
-
 # ☀️ Weather Forecast App
 
 An elegant **Weather Forecast App** built with **Jetpack Compose** following **Google’s recommended MVVM architecture**.
