@@ -15,6 +15,8 @@ Minimal, scalable, and modern — designed with best practices in mind. 🚀
 - [x] ⚡ **Kotlin Coroutines** – Asynchronous, responsive experience  
 - [ ] 📐 **Responsive UI** – Adapts to different screen sizes  
 - [ ] 🌙 **Dark/Light Theme Support** – (Planned)  
+- [ ]    **Add Menu System for lots of option like Themes, Adding the cities to it such that it would show dynamically in the home page.**
+- [ ]    **Adding nice loading feature**
 
 
 ---

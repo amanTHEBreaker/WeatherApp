@@ -27,13 +27,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.amanthebreaker.weatherapp.R
 import com.amanthebreaker.weatherapp.ui.theme.backgroundBrush1
-import com.amanthebreaker.weatherapp.util.WeatherAppDestination
 
 @Composable
 fun WeatherWelcomeScreen(
@@ -103,47 +98,6 @@ fun WeatherWelcomeScreen(
     }
 }
 
-
-@Composable
-fun WeatherNavGraph(startDestination: String = WeatherAppDestination.WEL_ROUTE) {
-    val navController = rememberNavController()
-
-    NavHost(navController = navController, startDestination = startDestination) {
-        composable(WeatherAppDestination.WEL_ROUTE) {
-            WeatherWelcomeScreen(
-                onGetStarted = {
-                    navController.navigate(WeatherAppDestination.HOME_ROUTE) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }
-            )
-        }
-
-        composable(WeatherAppDestination.HOME_ROUTE) {
-            WeatherApp(
-                onBackToWelcome = {
-                    navController.navigate(WeatherAppDestination.WEL_ROUTE) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState       = true
-                        }
-                        launchSingleTop     = true
-                        restoreState        = true
-                    }
-                },
-                onClickToSettings = {
-                    navController.navigate(WeatherAppDestination.SETTINGS)
-                }
-            )
-        }
-        composable(WeatherAppDestination.SETTINGS){
-           SettingsPage()
-        }
-    }
-}
 
 @Preview(showBackground = true)
 @Composable

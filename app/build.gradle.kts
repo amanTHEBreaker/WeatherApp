@@ -43,15 +43,18 @@ android {
 dependencies {
     //noinspection GradleDependency
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-
+    // retrofit
     implementation(libs.retrofit)
     implementation (libs.converter.gson)
-    implementation (libs.kotlinx.coroutines.android)
-
     implementation (libs.okhttp3.logging.interceptor)
+    // coroutine
+    implementation (libs.kotlinx.coroutines.android)
 
 //    for loading icons
     implementation(libs.coil.compose)
+
+    // location
+    implementation(libs.play.services.location)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -62,7 +65,9 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material3.window.size.class1.android)
-
+    // for datastore
+    implementation (libs.androidx.datastore.preferences)
+    // for navigation
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.navigation.runtime.android)
 
